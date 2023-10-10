@@ -1,4 +1,17 @@
-This is an updated version used for project [BioMeld](biomeld.eu). 
+This is an updated version used for project [BioMeld](http://biomeld.eu). 
+
+Follow these commands to reproduce the 3rd set of experiments:
+
+	git clone https://github.com/Antisthenis/reconfigurable_organisms.git
+	cd reconfigurable_organisms
+	git checkout origin/biomeld_dev
+	git checkout -b biomeld_dev
+	cp _voxcad/voxelyzeMain/voxelyze voxelyze
+	chmod 755 voxelyze
+	cp exp/Biohybrid_actuator.py Biohybrid_actuator.py
+	python Biohybrid_actuator.py [seed] [max_hours]
+
+Where "seed" change to all values between 50 and 59 and "max_hours" change to 24 or more.
 
 ------------
 Installation
@@ -13,7 +26,7 @@ But revert Anaconda's networkx <2.0.
 
 Install Qt and QMake, specifically these packages: "libqt4-dev", "qt4-qmake", "libqwt-dev", "freeglut3-dev" and "zlib1g-dev".
 
-    sudo apt-get install libqt4-dev qt4-qmake libqwt-dev freeglut3-dev zlib1g-dev
+   sudo apt-get install libqt4-dev qt4-qmake libqwt-dev freeglut3-dev zlib1g-dev
 
 
 Install git.
