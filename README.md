@@ -1,4 +1,4 @@
-This is an updated version used for project [BioMeld](biomeld.eu). 
+This is an updated version used for project [BioMeld](http://biomeld.eu). 
 
 ------------
 Installation
