@@ -197,16 +197,16 @@ def write_voxelyze_file(sim, env, individual, run_directory, run_name):
     for name, tag in env.new_param_tag_dict.items():
         voxelyze_file.write(tag + str(getattr(env, name)) + "</" + tag[1:] + "\n")
 
-    if env.num_hurdles > 0:
+    if env.num_FixedRegions > 0:
         voxelyze_file.write(
             "<Boundary_Conditions>\n\
-            <NumBCs>5</NumBCs>\n\
+            <NumBCs>2</NumBCs>\n\
             <FRegion>\n\
             <PrimType>0</PrimType>\n\
-            <X>" + str(fixed_regions_dict[0]["X"]) + "</X>\n\
+            <X>0</X>\n\
             <Y>0</Y>\n\
             <Z>0</Z>\n\
-            <dX>" + str(fixed_regions_dict[0]["dX"]) + "</dX>\n\
+            <dX>0.01</dX>\n\
             <dY>1</dY>\n\
             <dZ>1</dZ>\n\
             <Radius>0</Radius>\n\
@@ -230,21 +230,21 @@ def write_voxelyze_file(sim, env, individual, run_directory, run_name):
             </FRegion>\n\
             <FRegion>\n\
             <PrimType>0</PrimType>\n\
-            <X>" + str(fixed_regions_dict[1]["X"]) + "</X>\n\
+            <X>0.99</X>\n\
             <Y>0</Y>\n\
             <Z>0</Z>\n\
-            <dX>" + str(fixed_regions_dict[1]["dX"]) + "</dX>\n\
+            <dX>0.01</dX>\n\
             <dY>1</dY>\n\
             <dZ>1</dZ>\n\
             <Radius>0</Radius>\n\
-            <R>0.4</R>\n\
+            <R>1</R>\n\
             <G>0.6</G>\n\
-            <B>0.4</B>\n\
+            <B>1</B>\n\
             <alpha>1</alpha>\n\
-            <DofFixed>63</DofFixed>\n\
+            <DofFixed>0</DofFixed>\n\
             <ForceX>0</ForceX>\n\
             <ForceY>0</ForceY>\n\
-            <ForceZ>0</ForceZ>\n\
+            <ForceZ>" + str(env.downForceOnZ) + "</ForceZ>\n\
             <TorqueX>0</TorqueX>\n\
             <TorqueY>0</TorqueY>\n\
             <TorqueZ>0</TorqueZ>\n\
@@ -254,87 +254,6 @@ def write_voxelyze_file(sim, env, individual, run_directory, run_name):
             <AngDisplaceX>0</AngDisplaceX>\n\
             <AngDisplaceY>0</AngDisplaceY>\n\
             <AngDisplaceZ>0</AngDisplaceZ>\n\
-            </FRegion>\n\
-            <FRegion>\n\
-            <PrimType>0</PrimType>\n\
-            <X>0</X>\n\
-            <Y>" + str(fixed_regions_dict[2]["Y"]) + "</Y>\n\
-            <Z>0</Z>\n\
-            <dX>1</dX>\n\
-            <dY>" + str(fixed_regions_dict[2]["dY"]) + "</dY>\n\
-            <dZ>1</dZ>\n\
-            <Radius>0</Radius>\n\
-            <R>0.4</R>\n\
-            <G>0.6</G>\n\
-            <B>0.4</B>\n\
-            <alpha>1</alpha>\n\
-            <DofFixed>63</DofFixed>\n\
-            <ForceX>0</ForceX>\n\
-            <ForceY>0</ForceY>\n\
-            <ForceZ>0</ForceZ>\n\
-            <TorqueX>0</TorqueX>\n\
-            <TorqueY>0</TorqueY>\n\
-            <TorqueZ>0</TorqueZ>\n\
-            <DisplaceX>0</DisplaceX>\n\
-            <DisplaceY>0</DisplaceY>\n\
-            <DisplaceZ>0</DisplaceZ>\n\
-            <AngDisplaceX>0</AngDisplaceX>\n\
-            <AngDisplaceY>0</AngDisplaceY>\n\
-            <AngDisplaceZ>0</AngDisplaceZ>\n\
-            </FRegion>\n\
-            <FRegion>\n\
-            <PrimType>0</PrimType>\n\
-            <X>0</X>\n\
-            <Y>" + str(fixed_regions_dict[3]["Y"]) + "</Y>\n\
-            <Z>0</Z>\n\
-            <dX>1</dX>\n\
-            <dY>" + str(fixed_regions_dict[3]["dY"]) + "</dY>\n\
-            <dZ>1</dZ>\n\
-            <Radius>0</Radius>\n\
-            <R>0.4</R>\n\
-            <G>0.6</G>\n\
-            <B>0.4</B>\n\
-            <alpha>1</alpha>\n\
-            <DofFixed>63</DofFixed>\n\
-            <ForceX>0</ForceX>\n\
-            <ForceY>0</ForceY>\n\
-            <ForceZ>0</ForceZ>\n\
-            <TorqueX>0</TorqueX>\n\
-            <TorqueY>0</TorqueY>\n\
-            <TorqueZ>0</TorqueZ>\n\
-            <DisplaceX>0</DisplaceX>\n\
-            <DisplaceY>0</DisplaceY>\n\
-            <DisplaceZ>0</DisplaceZ>\n\
-            <AngDisplaceX>0</AngDisplaceX>\n\
-            <AngDisplaceY>0</AngDisplaceY>\n\
-            <AngDisplaceZ>0</AngDisplaceZ>\n\
-            </FRegion>\n\
-            <FRegion>\n\
-                <PrimType>0</PrimType>\n\
-                <X>0</X>\n\
-                <Y>0</Y>\n\
-                <Z>0</Z>\n\
-                <dX>1</dX>\n\
-                <dY>1</dY>\n\
-                <dZ>" + str(env.hurdle_height/length_workspace_xyz[2]) + "</dZ>\n\
-                <Radius>0</Radius>\n\
-                <R>0.4</R>\n\
-                <G>0.6</G>\n\
-                <B>0.4</B>\n\
-                <alpha>1</alpha>\n\
-                <DofFixed>63</DofFixed>\n\
-                <ForceX>0</ForceX>\n\
-                <ForceY>0</ForceY>\n\
-                <ForceZ>0</ForceZ>\n\
-                <TorqueX>0</TorqueX>\n\
-                <TorqueY>0</TorqueY>\n\
-                <TorqueZ>0</TorqueZ>\n\
-                <DisplaceX>0</DisplaceX>\n\
-                <DisplaceY>0</DisplaceY>\n\
-                <DisplaceZ>0</DisplaceZ>\n\
-                <AngDisplaceX>0</AngDisplaceX>\n\
-                <AngDisplaceY>0</AngDisplaceY>\n\
-                <AngDisplaceZ>0</AngDisplaceZ>\n\
             </FRegion>\n\
             </Boundary_Conditions>\n"
         )
