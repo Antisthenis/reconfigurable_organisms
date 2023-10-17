@@ -127,6 +127,8 @@ class MyPhenotype(Phenotype):
                 num_vox = np.sum(state > 0)
                 if num_vox < np.product(self.genotype.orig_size_xyz) * min_percent_full:
                     return False
+                if np.sum(state[0] == 0 ) > 0 :
+                    return False
                 if np.sum(state == 3) == 0:  # make sure has at least one muscle voxel for movement
                     return False
 
