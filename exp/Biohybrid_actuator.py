@@ -4,6 +4,7 @@ import sys
 import numpy as np
 import subprocess as sub
 from functools import partial
+from math import sqrt
 
 from base import Sim, Env, ObjectiveDict
 from networks import CPPN, DirectEncoding
@@ -61,6 +62,12 @@ EXTRA_GENS = 0
 RUN_DIR = "run_{}".format(SEED)
 RUN_NAME = "Actuators"
 
+EXP_NAME = "Actuators"
+PICKLE_DIR = "evoroso/data_analysis/results"
+
+TIME_BETWEEN_TRACES = 0.5   # To take traces of CM every 0.5 seconds
+
+
 def enclose_shell(this_softrobot, *args, **kwargs):
     mat = make_material_tree(this_softrobot, *args, **kwargs)
     mat[0, 0:IND_SIZE[1], 0:IND_SIZE[2]] = 1
@@ -70,6 +77,12 @@ def enclose_shell(this_softrobot, *args, **kwargs):
     mat[0:IND_SIZE[0], 0:IND_SIZE[1], 0]=1
     mat[0:IND_SIZE[0], 0:IND_SIZE[1], IND_SIZE[2]-1]=1
     return mat
+
+def my_dist(a,ind):  # To calculate the distance on YZ projection (from initial to midpoint and from midpoint to endpoint)
+    #midpoint = len(a)//2
+    end = -1
+    distance =  sqrt((a[0][1]-a[end][1])**2+(a[0][2]-a[end][2])**2) #+ sqrt((a[midpoint][1]-a[end][1])**2+(a[midpoint][2]-a[end][2])**2)+sqrt((a[0][1]-a[midpoint][1])**2+(a[0][2]-a[midpoint][2])**2)
+    return distance
 
 
 # def min_energy(a, ind):
@@ -157,9 +170,11 @@ if not os.path.isfile("./" + RUN_DIR + "/pickledPops/Gen_0.pickle"):
                  lattice_dimension=VOXEL_SIZE, grav_acc=GRAV_ACC, frequency=FREQ, muscle_stiffness=STIFFNESS, 
                  num_FixedRegions=2)
 
+    my_env.time_between_traces = TIME_BETWEEN_TRACES
+    
     my_objective_dict = ObjectiveDict()
-    my_objective_dict.add_objective(name="fitness", maximize=True, tag="<normAbsoluteDisplacement>",
-                                    # meta_func=min_energy
+    my_objective_dict.add_objective(name="fitness", maximize=True, tag="<CMTrace>",
+                                    meta_func=my_dist
                                     )
     my_objective_dict.add_objective(name="age", maximize=False, tag=None)
 

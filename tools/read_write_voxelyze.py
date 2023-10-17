@@ -34,7 +34,7 @@ def read_voxlyze_results(population, print_log, filename="softbotsOutput.xml"):
                 trace = []
                 n = 0
                 for line in this_file:
-                    if tag in line or n in [1, 2, 6]:
+                    if tag in line or n in [1, 2, 6, 7]:
                         n += 1
                     elif n == 3:
                         this_tag = "<TraceX>"
@@ -49,7 +49,7 @@ def read_voxlyze_results(population, print_log, filename="softbotsOutput.xml"):
                         z = float(line[line.find(this_tag) + len(this_tag):line.find("</" + this_tag[1:])])
                         trace += [(x, y, z)]
                         n += 1
-                    elif n == 7 and "</CMTrace>" not in line:
+                    elif n == 8 and "</CMTrace>" not in line:
                         n = 2
                 results[rank] = trace
 
