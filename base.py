@@ -65,7 +65,7 @@ class Env(VoxCadParams):
                  num_controller_synapses=0, signaling_updates_per_cycle=0, depolarizations_per_cycle=5,
                  repolarizations_per_cycle=1, lightsource_xyz=None, fluid_environment=False,
                  aggregate_drag_coefficient=0.0, block_material=8, block_density=1e+006, block_static_friction=1,
-                 block_dynamic_friction=0.5, external_block=False):
+                 block_dynamic_friction=0.5, external_block=False, num_FixedRegions=0, downForceOnZ=0):
 
         VoxCadParams.__init__(self)
 
@@ -147,6 +147,8 @@ class Env(VoxCadParams):
         self.block_static_friction = block_static_friction
         self.block_dynamic_friction = block_dynamic_friction
         self.external_block = external_block
+        self.num_FixedRegions = num_FixedRegions
+        self.downForceOnZ = downForceOnZ
 
 
 class Material(VoxCadParams):
