@@ -20,7 +20,7 @@ from tools.utils import make_material_tree, count_occurrences
 SEED = int(sys.argv[1])
 MAX_TIME = float(sys.argv[2])
 
-IND_SIZE = (8, 8, 7)
+IND_SIZE = (20, 8, 8)
 MIN_PERCENT_FULL = 0.5
 # MIN_PERCENT_MUSCLE = 0.1
 
@@ -60,6 +60,16 @@ EXTRA_GENS = 0
 
 RUN_DIR = "run_{}".format(SEED)
 RUN_NAME = "Actuators"
+
+def enclose_shell(this_softrobot, *args, **kwargs):
+    mat = make_material_tree(this_softrobot, *args, **kwargs)
+    mat[0, 0:IND_SIZE[1], 0:IND_SIZE[2]] = 1
+    mat[IND_SIZE[0]-1, 0:IND_SIZE[1], 0:IND_SIZE[2]] = 1
+    mat[0:IND_SIZE[0], 0, 0:IND_SIZE[2]]=1
+    mat[0:IND_SIZE[0], IND_SIZE[1]-1, 0:IND_SIZE[2]]=1
+    mat[0:IND_SIZE[0], 0:IND_SIZE[1], 0]=1
+    mat[0:IND_SIZE[0], 0:IND_SIZE[1], IND_SIZE[2]-1]=1
+    return mat
 
 
 # def min_energy(a, ind):
@@ -106,7 +116,7 @@ class MyGenotype(Genotype):
 
         self.add_network(CPPN(output_node_names=["shape", "muscleOrTissue"]))
 
-        self.to_phenotype_mapping.add_map(name="material", tag="<Data>", func=make_material_tree, output_type=int,
+        self.to_phenotype_mapping.add_map(name="material", tag="<Data>", func=enclose_shell, output_type=int,
                                           dependency_order=["shape", "muscleOrTissue"], logging_stats=None)
 
         self.to_phenotype_mapping.add_output_dependency(name="shape", dependency_name=None, requirement=None,
@@ -127,8 +137,9 @@ class MyPhenotype(Phenotype):
                 num_vox = np.sum(state > 0)
                 if num_vox < np.product(self.genotype.orig_size_xyz) * min_percent_full:
                     return False
-                if np.sum(state[0] == 0 ) > 0 :
-                    return False
+                ### Not required after enclosing in shell #####
+                #if np.sum(state[0] == 0 ) > 0 :
+                #    return False
                 if np.sum(state == 3) == 0:  # make sure has at least one muscle voxel for movement
                     return False
 
