@@ -1385,7 +1385,7 @@ bool CVX_Sim::UpdateStats(std::string* pRetMessage) //updates simulation state (
 
         // save most recent stats (prior to initCmTime)
         SS.CMTraceTime.push_back( GetCurTime() );
-        SS.CMTrace.push_back( GetCM() );
+        SS.CMTrace.push_back( GetFE() );
 
         int numTouchingGround = 0;
 
@@ -1414,7 +1414,7 @@ bool CVX_Sim::UpdateStats(std::string* pRetMessage) //updates simulation state (
         if (SS.CMTraceTime.empty() or (SS.CMTraceTime.back() + pEnv->getTimeBetweenTraces() <= GetCurTime()))
         {
             SS.CMTraceTime.push_back( GetCurTime() );
-            SS.CMTrace.push_back( GetCM() );
+            SS.CMTrace.push_back( GetFE() );
 
             int numTouchingGround = 0;
 
@@ -2493,6 +2493,17 @@ Vec3D<> CVX_Sim::GetCM(void)
 
 	return Sum/TotalMass;
 }
+
+
+
+Vec3D<> CVX_Sim::GetFE(void)
+{
+
+	int nVox = NumVox();
+	CVXS_Voxel* it = &VoxArray[nVox-1];
+	return it->GetCurPos();
+}
+
 
 int CVX_Sim::GetNumTouchingFloor()
 {

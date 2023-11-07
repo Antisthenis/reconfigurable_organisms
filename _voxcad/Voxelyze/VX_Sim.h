@@ -192,6 +192,7 @@ public:
 	int StatToCalc;
 
 	Vec3D<> GetCM(void);
+	Vec3D<> GetFE(void);
 	Vec3D<> IniCM; //initial center of mass
 
 	int GetNumTouchingFloor();
