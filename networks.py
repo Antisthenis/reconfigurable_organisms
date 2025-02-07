@@ -51,7 +51,7 @@ class CPPN(Network):
     def __init__(self, output_node_names):
         Network.__init__(self, output_node_names)
         self.set_minimal_graph()
-        self.mutate()
+        self.mutate(num_random_node_adds=2, num_random_node_removals=0, num_random_link_adds=3, num_random_link_removals=1, num_random_activation_functions=10, num_random_weight_changes=10)
 
     def set_minimal_graph(self):
         """Create a simple graph with each input attached to each output"""
