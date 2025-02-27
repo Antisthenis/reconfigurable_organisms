@@ -70,12 +70,23 @@ TIME_BETWEEN_TRACES = 0.5   # To take traces of CM every 0.5 seconds
 
 def enclose_shell(this_softrobot, *args, **kwargs):
     mat = make_material_tree(this_softrobot, *args, **kwargs)
-    mat[0, 0:IND_SIZE[1], 0:IND_SIZE[2]] = 1
-    mat[IND_SIZE[0]-1, 0:IND_SIZE[1], 0:IND_SIZE[2]] = 1
-    mat[0:IND_SIZE[0], 0, 0:IND_SIZE[2]]=1
-    mat[0:IND_SIZE[0], IND_SIZE[1]-1, 0:IND_SIZE[2]]=1
-    mat[0:IND_SIZE[0], 0:IND_SIZE[1], 0]=1
-    mat[0:IND_SIZE[0], 0:IND_SIZE[1], IND_SIZE[2]-1]=1
+    #mat[0, 0:IND_SIZE[1], 0:IND_SIZE[2]] = 1              ## x = 0
+    #mat[IND_SIZE[0]-1, 0:IND_SIZE[1], 0:IND_SIZE[2]] = 1  ## x = end
+    mat[0:2, 0:IND_SIZE[1], 0:IND_SIZE[2]] = 0              ## x = 0
+    
+    #mat[0:IND_SIZE[0], 0, 0:IND_SIZE[2]]=1              ## y = 0
+    #mat[0:IND_SIZE[0], IND_SIZE[1]-1, 0:IND_SIZE[2]]=1  ## y = end
+    mat[0:IND_SIZE[0], 0:IND_SIZE[1], 0]= 1               ## z = 0
+
+    mat[0:IND_SIZE[0], 0:IND_SIZE[1], 1:3]= 0               ## z = 1
+    mat[0:IND_SIZE[0], 0:IND_SIZE[1], IND_SIZE[2]-1]=0    ## z = end
+
+    mat[IND_SIZE[0]//3, IND_SIZE[1]//2-1:IND_SIZE[1]//2+1, 0:IND_SIZE[2]] = 1  ## x = First pillar
+    mat[2*IND_SIZE[0]//3, IND_SIZE[1]//2-1:IND_SIZE[1]//2+1, 0:IND_SIZE[2]] = 1  ## x = Second pillar
+
+    mat[IND_SIZE[0]//3, IND_SIZE[1]//2-1, IND_SIZE[2]-1] = 9  ## x = First pillar top sensor
+    mat[2*IND_SIZE[0]//3, IND_SIZE[1]//2-1, IND_SIZE[2]-1] = 9  ## x = Second pillar top sensor
+
     return mat
 
 def my_dist(a,ind):  # To calculate the distance on YZ projection (from initial to midpoint and from midpoint to endpoint)
@@ -173,8 +184,7 @@ if not os.path.isfile("./" + RUN_DIR + "/pickledPops/Gen_0.pickle"):
     my_env.time_between_traces = TIME_BETWEEN_TRACES
     
     my_objective_dict = ObjectiveDict()
-    my_objective_dict.add_objective(name="fitness", maximize=True, tag="<CMTrace>",
-                                    meta_func=my_dist
+    my_objective_dict.add_objective(name="fitness", maximize=False, tag="<PilDist>",
                                     )
     my_objective_dict.add_objective(name="age", maximize=False, tag=None)
 
