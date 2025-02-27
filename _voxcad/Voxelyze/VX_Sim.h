@@ -220,6 +220,7 @@ public:
 	double GetAvgForwardModelError();
 
 	float GetBlockPos();
+	float GetPilDis();
 
 	double GetAvgRoll();
 	double GetAvgPitch();
