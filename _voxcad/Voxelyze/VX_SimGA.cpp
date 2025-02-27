@@ -57,6 +57,7 @@ void CVX_SimGA::WriteResultFile(CXML_Rip* pXML, CVX_SimGA* simToCombine)
 	float avgForwardModelError = GetAvgForwardModelError();
 
 	float blockPos = GetBlockPos();
+	float PilDist = GetPilDis();
 
 	double integratedTiltError = 0.0;
 	if (Rolls.size() > 0){
@@ -100,6 +101,7 @@ void CVX_SimGA::WriteResultFile(CXML_Rip* pXML, CVX_SimGA* simToCombine)
 	pXML->Element("avgForwardModelError", avgForwardModelError);
 
 	pXML->Element("BlockPos", blockPos);
+	pXML->Element("PilDist", PilDist);
 
 	pXML->Element("avgRoll", avgRoll);
 	pXML->Element("avgPitch", avgPitch);
