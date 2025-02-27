@@ -2612,6 +2612,31 @@ bool CVX_Sim::GetHasFallenOver()
 }
 
 
+float CVX_Sim::GetPilDis()
+{	
+	int numPillar = 0;
+	float p1x = 0.0;
+	float p1y = 0.0;	
+	float p1z = 0.0;
+	float Dist = 0.0;
+	int iT = NumVox();
+	for (int i=0; i<iT; i++)
+	{
+		if (VoxArray[i].GetMaterialIndex() == 9 && numPillar==0)
+		{
+		    	p1x = VoxArray[i].GetCurPos().x;
+			p1y = VoxArray[i].GetCurPos().y;	
+			p1z = VoxArray[i].GetCurPos().z;
+			numPillar += 1;
+		}
+		if (VoxArray[i].GetMaterialIndex() == 9 && numPillar>0)
+		{
+		    Dist = sqrt(pow((VoxArray[i].GetCurPos().x-p1x), 2) + pow((VoxArray[i].GetCurPos().y-p1y),2) + pow((VoxArray[i].GetCurPos().z-p1z),2));
+		}
+	}
+	return Dist;
+}
+
 float CVX_Sim::GetBlockPos()
 {
 	int numBlocks = 0;
