@@ -21,7 +21,7 @@ from tools.utils import make_material_tree, count_occurrences
 SEED = int(sys.argv[1])
 MAX_TIME = float(sys.argv[2])
 
-IND_SIZE = (20, 8, 8)
+IND_SIZE = (30, 10, 10)
 MIN_PERCENT_FULL = 0.5
 # MIN_PERCENT_MUSCLE = 0.1
 
@@ -29,17 +29,18 @@ VOXEL_SIZE = 0.05  # meters
 
 # MIN_ELASTIC_MOD = 1e5
 # MAX_ELASTIC_MOD = 1e8
-STIFFNESS = 5e6
+M_STIFFNESS = 5e6
+B_STIFFNESS = 5e7
 
-POP_SIZE = 50
-MAX_GENS = 5000
+POP_SIZE = 20
+MAX_GENS = 100
 NUM_RANDOM_INDS = 1
 
-INIT_TIME = 1
-SIM_TIME = 10.0 + INIT_TIME  # includes init time
+INIT_TIME = 0.5
+SIM_TIME = 1.5 + INIT_TIME  # includes init time
 TEMP_AMP = 39.4714242553  # 50% volumetric change with temp_base=25: (1+0.01*(39.4714242553-25))**3-1=0.5
 # MAX_FREQUENCY = 4.0
-FREQ = 2
+FREQ = 0.5
 
 DT_FRAC = 0.9  # 0.3
 
@@ -122,16 +123,16 @@ class MyGenotype(Genotype):
     def __init__(self):
         Genotype.__init__(self, orig_size_xyz=IND_SIZE)
 
-        self.add_network(DirectEncoding(output_node_name="phase_offset", orig_size_xyz=IND_SIZE, symmetric=False,
+        #self.add_network(DirectEncoding(output_node_name="phase_offset", orig_size_xyz=IND_SIZE, symmetric=False,
                                         # upper_bound=0.5, lower_bound=-0.5
-                                        ),
-                         freeze=True)
+        #                                ),
+        #                 freeze=True)
         # self.to_phenotype_mapping.add_map(name="phase_offset", tag="<PhaseOffset>", logging_stats=None,
         #                                   func=random_like)
 
         # self.add_network(CPPN(output_node_names=["phase_offset"]))
-        self.to_phenotype_mapping.add_map(name="phase_offset", tag="<PhaseOffset>", logging_stats=None)
-
+        #self.to_phenotype_mapping.add_map(name="phase_offset", tag="<PhaseOffset>", logging_stats=None)
+#
         # self.add_network(CPPN(output_node_names=["frequency", "stiffness"]))
         # self.to_phenotype_mapping.add_map(name="frequency", tag="<TempPeriod>", env_kws={"frequency": freq_func})
         # self.to_phenotype_mapping.add_map(name="stiffness", tag="<Stiffness>", func=stiff_func,
@@ -177,9 +178,9 @@ if not os.path.isfile("./" + RUN_DIR + "/pickledPops/Gen_0.pickle"):
 
     my_sim = Sim(dt_frac=DT_FRAC, simulation_time=SIM_TIME, fitness_eval_init_time=INIT_TIME)
 
-    my_env = Env(temp_amp=TEMP_AMP, fluid_environment=FLUID_ENV, aggregate_drag_coefficient=AGGREGATE_DRAG_COEF,
-                 lattice_dimension=VOXEL_SIZE, grav_acc=GRAV_ACC, frequency=FREQ, muscle_stiffness=STIFFNESS, 
-                 num_FixedRegions=2)
+    my_env = Env(temp_amp=TEMP_AMP, fluid_environment=FLUID_ENV, aggregate_drag_coefficient=AGGREGATE_DRAG_COEF, floor_enabled=1,
+                 lattice_dimension=VOXEL_SIZE, contract_only=True, grav_acc=GRAV_ACC, frequency=FREQ, muscle_stiffness=M_STIFFNESS, 
+                 fat_stiffness=B_STIFFNESS, falling_prohibited=True, gravity_enabled=0, num_FixedRegions=2)
 
     my_env.time_between_traces = TIME_BETWEEN_TRACES
     
